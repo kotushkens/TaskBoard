@@ -1,5 +1,7 @@
 package com.tasks.taskboard.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class ReleaseDTO {
     private String version;
     private String start;

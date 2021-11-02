@@ -1,5 +1,6 @@
 package com.tasks.taskboard.entities;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.CollectionTable;
@@ -7,10 +8,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Schema(description = "Сущность задания")
 @Entity
 public class TaskBoardEntity {
     @Id
     @GenericGenerator(name="generator", strategy = "auto")
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Integer id;
     @Column
     private String status;
@@ -19,11 +22,26 @@ public class TaskBoardEntity {
     @Column
     private Integer author;
     @Column
-    private Integer Executor;
+    private Integer executor;
     @Column
     private String taskType;
     @Column
     private String description;
+
+    public TaskBoardEntity(){
+    }
+
+    public TaskBoardEntity(Integer id, String status,
+                           String releaseVersion, Integer author,
+                           Integer executor, String taskType, String description) {
+        this.id = id;
+        this.status = status;
+        this.releaseVersion = releaseVersion;
+        this.author = author;
+        this.executor = executor;
+        this.taskType = taskType;
+        this.description = description;
+    }
 
     public Integer getId() {
         return id;
@@ -58,11 +76,11 @@ public class TaskBoardEntity {
     }
 
     public Integer getExecutor() {
-        return Executor;
+        return executor;
     }
 
     public void setExecutor(Integer executor) {
-        Executor = executor;
+        executor = executor;
     }
 
     public String getTaskType() {
