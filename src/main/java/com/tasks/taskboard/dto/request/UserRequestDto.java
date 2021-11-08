@@ -1,20 +1,35 @@
-package com.tasks.taskboard.dto;
+package com.tasks.taskboard.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public class UserDTO {
-    private Integer id;
+import java.util.Date;
+
+public class UserRequestDto {
+    private Long id;
     private String name;
     private String surname;
     private String contacts;
-    private String role;
     private String password;
+    private String repeatPassword;
 
-    public Integer getId() {
+
+    public UserRequestDto(){
+    }
+
+    public UserRequestDto(Long id, String name, String surname,
+                          String contacts, String password) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.contacts = contacts;
+        this.password = password;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -50,11 +65,7 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
+    public String getRepeatPassword() {
+        return repeatPassword;
     }
 }

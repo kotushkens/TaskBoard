@@ -1,43 +1,37 @@
-package com.tasks.taskboard.entities;
+package com.tasks.taskboard.dto.response;
 
 import com.tasks.taskboard.dto.request.ReleaseRequestDto;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Date;
 
-@Schema(description = "Сущность релиза")
-@Entity
-public class ReleaseEntity {
-    @Id
-    @GenericGenerator(name="generator", strategy = "auto")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+public class ReleaseResponseDto {
+    private String message;
     private Long id;
-    @Column
     private String version;
-    @Column
     private Date start;
-    @Column
     private Date end;
+    private ReleaseRequestDto release;
 
-    public ReleaseEntity(){
+    public ReleaseResponseDto() {
     }
 
-    public ReleaseEntity(ReleaseRequestDto release){
-        this.id = release.getId();
-        this.version = release.getVersion();
-        this.start = release.getStart();
-        this.end = release.getEnd();
-    }
-
-    public ReleaseEntity(Long id, String version, Date start, Date end) {
+    public ReleaseResponseDto(Long id, String version, Date start, Date end) {
         this.id = id;
         this.version = version;
         this.start = start;
         this.end = end;
+
+    }
+
+    public ReleaseResponseDto(ReleaseRequestDto release){
+        this.release = release;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Long getId() {
@@ -71,4 +65,5 @@ public class ReleaseEntity {
     public void setEnd(Date end) {
         this.end = end;
     }
+
 }

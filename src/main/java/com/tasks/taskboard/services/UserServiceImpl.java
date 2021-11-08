@@ -1,63 +1,98 @@
 package com.tasks.taskboard.services;
 
+import com.tasks.taskboard.dto.request.UserRequestDto;
+import com.tasks.taskboard.dto.response.UserResponseDto;
 import com.tasks.taskboard.entities.UserEntity;
+import com.tasks.taskboard.exceptions.NotValidParametersException;
+import com.tasks.taskboard.exceptions.ObjectDoesNotExistsException;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+
 
 // Сервис, реализующий методы для работы контроллера
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    // Хранилище пользователей
-    private static final HashMap<Integer, UserEntity> usersRepository = new HashMap<>();
-
-
-    @Override
-    public void create(Integer id, String name, String surname, String contacts, String role) {
-        UserEntity user = new UserEntity(id, name, surname, contacts, role);
-        usersRepository.put(id, user);
-    }
-
-    @Override
-    public List<UserEntity> readAll() {
-        return new ArrayList<>(usersRepository.values());
-    }
-
-    @Override
-    public UserEntity read(int id) {
-        return usersRepository.get(id);
-    }
+    // Хранилище релизов
+    private static final HashMap<Long, UserResponseDto> objects = new HashMap<>();
 
 
     @Override
-    public boolean update(int id, UserEntity user) {
-        if (usersRepository.containsKey(id)) {
-            user.setId(id);
-            usersRepository.put(id, user);
-            return true;
+    //????????????????/
+    public ResponseEntity<UserResponseDto> create(UserRequestDto user) throws NotValidParametersException {
+        try {
+            // UserEntity userEntity = new UserEntity(user);
+            UserResponseDto response = new UserResponseDto(user);
+            response.setMessage("Объект успешно создан");
+            objects.put(user.getId(), response);
+            return ResponseEntity.ok()
+                    .body(response);
+        } catch (NotValidParametersException ex) {
+            throw new NotValidParametersException("Не удалось создать объект");
         }
-        return false;
     }
 
     @Override
-    public boolean delete(int id) {
-        if (usersRepository.containsKey(id)) {
-            usersRepository.remove(id);
-            return true;
+    public ResponseEntity<Collection<UserResponseDto>> readAll() throws NotValidParametersException {
+        try {
+            if (CollectionUtils.isNotEmpty(objects.values())) {
+                return ResponseEntity.ok()
+                        .body(objects.values());
+            } else {
+                throw new ObjectDoesNotExistsException("Список пуст");
+            }
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Список не инициализирован");
         }
-        return false;
     }
 
     @Override
-    public boolean deleteAll() {
-        if (!usersRepository.isEmpty()) {
-            usersRepository.clear();
-            return true;
+    public ResponseEntity<UserResponseDto> read(Long id) throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            return ResponseEntity.ok()
+                    .body(objects.get(id));
+        } else {
+            throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
         }
-        return false;
+    }
+
+
+    @Override
+    public ResponseEntity<UserResponseDto> update(Long id, UserRequestDto user)
+            throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            return ResponseEntity.ok()
+                    .body(objects.get(id));
+        } else {
+            throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> delete(Long id) throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            objects.remove(id);
+            return ResponseEntity.ok()
+                    .body("Объект удален");
+        }
+        throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
+    }
+
+    @Override
+    public ResponseEntity<String> deleteAll() throws  NotValidParametersException {
+        if (!objects.isEmpty()) {
+            objects.clear();
+            return ResponseEntity.ok()
+                    .body("Список очищен");
+        } else {
+            throw new NotValidParametersException("Cписок пуст");
+        }
     }
 }

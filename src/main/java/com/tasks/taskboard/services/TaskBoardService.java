@@ -1,57 +1,44 @@
 package com.tasks.taskboard.services;
 
-import com.tasks.taskboard.entities.TaskBoardEntity;
+import com.tasks.taskboard.dto.request.TaskBoardRequestDto;
+import com.tasks.taskboard.dto.response.TaskBoardResponseDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+import java.util.Collection;
 
-/**
- * Интерфейс для работы с объектами TaskBoard
- */
 
+/** Интерфейс для работы с объектами TaskBoard */
 public interface TaskBoardService {
-    /**
-     * Создание нового объекта TaskBoard
+    /** Создание нового объекта TaskBoard
      */
-    void create(Integer id, String status,
-                String releaseVersion, Integer author,
-                Integer executor, String taskType, String description);
+    ResponseEntity<?> create(@RequestBody TaskBoardRequestDto taskBoard);
 
-    /**
-     * Получить список всех объектов TaskBoard
-     *
+
+    /** Получить список всех объектов TaskBoard
      * @return список всех релизов
      */
-    List<TaskBoardEntity> readAll();
+    ResponseEntity<Collection<TaskBoardResponseDto>> readAll();
 
-    /**
-     * Получить объект TaskBoard
-     *
+    /** Получить объект TaskBoard
      * @param id - id объекта TaskBoard
      */
-    TaskBoardEntity read(int id);
+    ResponseEntity<TaskBoardResponseDto> read(Long id);
 
-    /**
-     * Обновить объект TaskBoard
-     *
+    /** Обновить объект TaskBoard
      * @param id - id объекта TaskBoard
-     * @return true, если данные обновлены, иначе false
+     * @return перезаписанный объект taskBoard
      */
-    boolean update(int id, TaskBoardEntity TaskBoard);
+    ResponseEntity<TaskBoardResponseDto> update(Long id, TaskBoardRequestDto taskBoard);
 
-    /**
-     * Удалить объект TaskBoard
-     *
+    /** Удалить объект taskBoard
      * @param id - id объекта TaskBoard
      * @return true если удалено, иначе false
      */
-    boolean delete(int id);
+    ResponseEntity delete(Long id);
 
-    /**
-     * Удалить все объекты TaskBoard
-     *
+    /** Удалить все объекты TaskBoard
      * @return true если удалены, иначе false
      */
-    boolean deleteAll();
+    ResponseEntity deleteAll();
 }
-
-

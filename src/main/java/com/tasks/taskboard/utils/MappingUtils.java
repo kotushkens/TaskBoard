@@ -1,14 +1,13 @@
 package com.tasks.taskboard.utils;
 
-import com.tasks.taskboard.dto.ProjectDTO;
-import com.tasks.taskboard.entities.ProjectEntity;
-import org.springframework.stereotype.Service;
+import com.tasks.taskboard.dto.request.ProjectRequestDto;
+import com.tasks.taskboard.dto.response.ProjectResponseDto;
+import org.springframework.stereotype.Component;
 
 /** MappingUtils - класс для конвертации объектов в DTO и наоборот
  */
 
-@Service
+@Component
 public class MappingUtils {
     // Project из entity в DTO
-   
 }

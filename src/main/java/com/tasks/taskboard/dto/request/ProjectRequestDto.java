@@ -1,18 +1,31 @@
-package com.tasks.taskboard.dto;
+package com.tasks.taskboard.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public class ProjectDTO {
-    private Integer id;
+import java.util.Date;
+
+public class ProjectRequestDto {
+    private Long id;
     private String name;
-    private String isPaid;
+    private boolean isPaid;
     private String latestRelease;
 
-    public Integer getId() {
+    public ProjectRequestDto(){
+    }
+
+    public ProjectRequestDto(Long id, String name, boolean isPaid, String latestRelease) {
+        this.id = id;
+        this.name = name;
+        this.isPaid = isPaid;
+        this.latestRelease = latestRelease;
+
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -24,11 +37,11 @@ public class ProjectDTO {
         this.name = name;
     }
 
-    public String getIsPaid() {
+    public boolean getIsPaid() {
         return isPaid;
     }
 
-    public void setIsPaid(String isPaid) {
+    public void setIsPaid(boolean isPaid) {
         this.isPaid = isPaid;
     }
 
@@ -39,4 +52,6 @@ public class ProjectDTO {
     public void setLatestRelease(String latestRelease) {
         this.latestRelease = latestRelease;
     }
+
+
 }
