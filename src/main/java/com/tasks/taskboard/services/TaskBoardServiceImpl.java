@@ -1,66 +1,99 @@
 package com.tasks.taskboard.services;
 
+import com.tasks.taskboard.dto.request.TaskBoardRequestDto;
+import com.tasks.taskboard.dto.response.TaskBoardResponseDto;
 import com.tasks.taskboard.entities.TaskBoardEntity;
+import com.tasks.taskboard.exceptions.NotValidParametersException;
+import com.tasks.taskboard.exceptions.ObjectDoesNotExistsException;
+import com.tasks.taskboard.utils.MappingUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+
 
 // Сервис, реализующий методы для работы контроллера
 
 @Service
 public class TaskBoardServiceImpl implements TaskBoardService {
-
     // Хранилище заданий
-    private static final HashMap<Integer, TaskBoardEntity> taskBoardsRepository = new HashMap<>();
-
-
-    @Override
-    public void create(Integer id, String status,
-                       String releaseVersion, Integer author,
-                       Integer executor, String taskType, String description) {
-        TaskBoardEntity taskBoard = new TaskBoardEntity(id, status, releaseVersion, author,
-                executor, taskType, description);
-        taskBoardsRepository.put(id, taskBoard);
-    }
+    private static final HashMap<Long, TaskBoardResponseDto> objects = new HashMap<>();
+    MappingUtils mapper = new MappingUtils();
 
     @Override
-    public List<TaskBoardEntity> readAll() {
-        return new ArrayList<>(taskBoardsRepository.values());
-    }
-
-    @Override
-    public TaskBoardEntity read(int id) {
-        return taskBoardsRepository.get(id);
-    }
-
-
-    @Override
-    public boolean update(int id, TaskBoardEntity taskBoard) {
-        if (taskBoardsRepository.containsKey(id)) {
-            taskBoard.setId(id);
-            taskBoardsRepository.put(id, taskBoard);
-            return true;
+    //????????????????/
+    public ResponseEntity<TaskBoardResponseDto> create(TaskBoardRequestDto taskBoard) throws NotValidParametersException {
+        try {
+            // TaskBoardEntity taskBoardEntity = new TaskBoardEntity(taskBoard);
+            TaskBoardResponseDto response = new TaskBoardResponseDto(taskBoard);
+            response.setMessage("Объект успешно создан");
+            objects.put(taskBoard.getId(), response);
+            return ResponseEntity.ok()
+                    .body(response);
+        } catch (NotValidParametersException ex) {
+            throw new NotValidParametersException("Не удалось создать объект");
         }
-        return false;
     }
 
     @Override
-    public boolean delete(int id) {
-        if (taskBoardsRepository.containsKey(id)) {
-            taskBoardsRepository.remove(id);
-            return true;
+    public ResponseEntity<Collection<TaskBoardResponseDto>> readAll() throws NotValidParametersException {
+        try {
+            if (CollectionUtils.isNotEmpty(objects.values())) {
+                return ResponseEntity.ok()
+                        .body(objects.values());
+            } else {
+                throw new ObjectDoesNotExistsException("Список пуст");
+            }
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Список не инициализирован");
         }
-        return false;
     }
 
     @Override
-    public boolean deleteAll() {
-        if (!taskBoardsRepository.isEmpty()) {
-            taskBoardsRepository.clear();
-            return true;
+    public ResponseEntity<TaskBoardResponseDto> read(Long id) throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            return ResponseEntity.ok()
+                    .body(objects.get(id));
+        } else {
+            throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
         }
-        return false;
+    }
+
+
+    @Override
+    public ResponseEntity<TaskBoardResponseDto> update(Long id, TaskBoardRequestDto taskBoard)
+            throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            return ResponseEntity.ok()
+                    .body(objects.get(id));
+        } else {
+            throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> delete(Long id) throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            objects.remove(id);
+            return ResponseEntity.ok()
+                    .body("Объект удален");
+        }
+        throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
+    }
+
+    @Override
+    public ResponseEntity<String> deleteAll() throws  NotValidParametersException {
+        if (!objects.isEmpty()) {
+            objects.clear();
+            return ResponseEntity.ok()
+                    .body("Список очищен");
+        } else {
+            throw new NotValidParametersException("Cписок пуст");
+        }
     }
 }

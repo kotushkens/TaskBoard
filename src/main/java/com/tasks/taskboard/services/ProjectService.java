@@ -1,40 +1,45 @@
 package com.tasks.taskboard.services;
 
-import com.tasks.taskboard.entities.ProjectEntity;
+import com.tasks.taskboard.dto.request.ProjectRequestDto;
+import com.tasks.taskboard.dto.response.ProjectResponseDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+
+import java.util.Collection;
 
 
 /** Интерфейс для работы с объектами Project */
 public interface ProjectService {
     /** Создание нового объекта Project
      */
-    void create(Integer id, String name, String isPaid, String latestRelease);
+    ResponseEntity<?> create(@RequestBody ProjectRequestDto project);
+
 
     /** Получить список всех объектов Project
-     * @return список всех проектов
+     * @return список всех релизов
      */
-    List<ProjectEntity> readAll();
+    ResponseEntity<Collection<ProjectResponseDto>> readAll();
 
     /** Получить объект Project
-    * @param id - id объекта Project
+     * @param id - id объекта Project
      */
-    ProjectEntity read(int id);
+    ResponseEntity<ProjectResponseDto> read(Long id);
 
     /** Обновить объект Project
-    * @param id - id объекта Project
-    * @return true, если данные обновлены, иначе false
+     * @param id - id объекта Project
+     * @return перезаписанный объект project
      */
-    boolean update(int id, ProjectEntity project);
+    ResponseEntity<ProjectResponseDto> update(Long id, ProjectRequestDto project);
 
     /** Удалить объект project
-    * @param id - id объекта Project
-    * @return true если удалено, иначе false
+     * @param id - id объекта Project
+     * @return true если удалено, иначе false
      */
-    boolean delete(int id);
+    ResponseEntity delete(Long id);
 
     /** Удалить все объекты Project
      * @return true если удалены, иначе false
      */
-    boolean deleteAll();
+    ResponseEntity deleteAll();
 }

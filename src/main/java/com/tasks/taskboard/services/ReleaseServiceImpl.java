@@ -1,65 +1,98 @@
 package com.tasks.taskboard.services;
 
+import com.tasks.taskboard.dto.request.ReleaseRequestDto;
+import com.tasks.taskboard.dto.response.ReleaseResponseDto;
 import com.tasks.taskboard.entities.ReleaseEntity;
+import com.tasks.taskboard.exceptions.NotValidParametersException;
+import com.tasks.taskboard.exceptions.ObjectDoesNotExistsException;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
+
+
+// Сервис, реализующий методы для работы контроллера
 
 @Service
 public class ReleaseServiceImpl implements ReleaseService {
-// Сервис, реализующий методы для работы контроллера
-
-
     // Хранилище релизов
-    private static final HashMap<String, ReleaseEntity> ReleasesRepository = new HashMap<>();
+    private static final HashMap<Long, ReleaseResponseDto> objects = new HashMap<>();
 
 
     @Override
-    public void create(String version, String start, String end) {
-        ReleaseEntity release = new ReleaseEntity(version, start, end);
-        ReleasesRepository.put(version, release);
-    }
-
-    @Override
-    public List<ReleaseEntity> readAll() {
-        return new ArrayList<>(ReleasesRepository.values());
-    }
-
-    @Override
-    public ReleaseEntity read(String version) {
-        return ReleasesRepository.get(version);
-    }
-
-
-    @Override
-    public boolean update(String version, ReleaseEntity Release) {
-        if (ReleasesRepository.containsKey(version)) {
-            Release.setVersion(version);
-            ReleasesRepository.put(version, Release);
-            return true;
+    //????????????????/
+    public ResponseEntity<ReleaseResponseDto> create(ReleaseRequestDto release) throws NotValidParametersException {
+        try {
+           // ReleaseEntity releaseEntity = new ReleaseEntity(release);
+            ReleaseResponseDto response = new ReleaseResponseDto(release);
+            response.setMessage("Объект успешно создан");
+            objects.put(release.getId(), response);
+            return ResponseEntity.ok()
+                    .body(response);
+        } catch (NotValidParametersException ex) {
+            throw new NotValidParametersException("Не удалось создать объект");
         }
-        return false;
     }
 
     @Override
-    public boolean delete(String version) {
-        if (ReleasesRepository.containsKey(version)) {
-            ReleasesRepository.remove(version);
-            return true;
+    public ResponseEntity<Collection<ReleaseResponseDto>> readAll() throws NotValidParametersException {
+        try {
+            if (CollectionUtils.isNotEmpty(objects.values())) {
+                return ResponseEntity.ok()
+                        .body(objects.values());
+            } else {
+                throw new ObjectDoesNotExistsException("Список пуст");
+            }
+        } catch (NullPointerException e) {
+            throw new NullPointerException("Список не инициализирован");
         }
-        return false;
     }
 
     @Override
-    public boolean deleteAll() {
-        if (!ReleasesRepository.isEmpty()) {
-            ReleasesRepository.clear();
-            return true;
+    public ResponseEntity<ReleaseResponseDto> read(Long id) throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            return ResponseEntity.ok()
+                    .body(objects.get(id));
+        } else {
+            throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
         }
-        return false;
+    }
+
+
+    @Override
+    public ResponseEntity<ReleaseResponseDto> update(Long id, ReleaseRequestDto release)
+            throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            return ResponseEntity.ok()
+                    .body(objects.get(id));
+        } else {
+            throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> delete(Long id) throws ObjectDoesNotExistsException {
+        if (objects.containsKey(id)) {
+            objects.remove(id);
+            return ResponseEntity.ok()
+                    .body("Объект удален");
+        }
+        throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
+    }
+
+    @Override
+    public ResponseEntity<String> deleteAll() throws  NotValidParametersException {
+        if (!objects.isEmpty()) {
+            objects.clear();
+            return ResponseEntity.ok()
+                    .body("Список очищен");
+        } else {
+            throw new NotValidParametersException("Cписок пуст");
+        }
     }
 }
-
-

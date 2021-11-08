@@ -1,56 +1,44 @@
 package com.tasks.taskboard.services;
 
-import com.tasks.taskboard.entities.UserEntity;
+import com.tasks.taskboard.dto.request.UserRequestDto;
+import com.tasks.taskboard.dto.response.UserResponseDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+import java.util.Collection;
 
-    /**
-     * Интерфейс для работы с объектами User
+
+/** Интерфейс для работы с объектами User */
+public interface UserService {
+    /** Создание нового объекта User
      */
-
-    public interface UserService {
-        /**
-         * Создание нового объекта User
-         */
-        void create(Integer id, String name, String surname, String contacts, String role);
-
-        /**
-         * Получить список всех объектов User
-         *
-         * @return список всех релизов
-         */
-        List<UserEntity> readAll();
-
-        /**
-         * Получить объект User
-         *
-         * @param id - id объекта User
-         */
-        UserEntity read(int id);
-
-        /**
-         * Обновить объект User
-         *
-         * @param id - id объекта User
-         * @return true, если данные обновлены, иначе false
-         */
-        boolean update(int id, UserEntity User);
-
-        /**
-         * Удалить объект User
-         *
-         * @param id - id объекта User
-         * @return true если удалено, иначе false
-         */
-        boolean delete(int id);
-
-        /**
-         * Удалить все объекты User
-         *
-         * @return true если удалены, иначе false
-         */
-        boolean deleteAll();
-    }
+    ResponseEntity<?> create(@RequestBody UserRequestDto user);
 
 
+    /** Получить список всех объектов User
+     * @return список всех релизов
+     */
+    ResponseEntity<Collection<UserResponseDto>> readAll();
 
+    /** Получить объект User
+     * @param id - id объекта User
+     */
+    ResponseEntity<UserResponseDto> read(Long id);
+
+    /** Обновить объект User
+     * @param id - id объекта User
+     * @return перезаписанный объект user
+     */
+    ResponseEntity<UserResponseDto> update(Long id, UserRequestDto user);
+
+    /** Удалить объект user
+     * @param id - id объекта User
+     * @return true если удалено, иначе false
+     */
+    ResponseEntity delete(Long id);
+
+    /** Удалить все объекты User
+     * @return true если удалены, иначе false
+     */
+    ResponseEntity deleteAll();
+}
