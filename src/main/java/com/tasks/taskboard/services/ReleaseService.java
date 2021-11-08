@@ -1,56 +1,45 @@
 package com.tasks.taskboard.services;
 
-import com.tasks.taskboard.entities.ReleaseEntity;
+import com.tasks.taskboard.dto.request.ReleaseRequestDto;
+import com.tasks.taskboard.dto.response.ReleaseResponseDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
-/**
- * Интерфейс для работы с объектами Release
- */
 
+/** Интерфейс для работы с объектами Release */
 public interface ReleaseService {
-
-    /**
-     * Создание нового объекта Release
+    /** Создание нового объекта Release
      */
-    void create(String version, String start, String end);
+    ResponseEntity<?> create(@RequestBody ReleaseRequestDto release);
 
-    /**
-     * Получить список всех объектов Release
-     *
+
+    /** Получить список всех объектов Release
      * @return список всех релизов
      */
-    List<ReleaseEntity> readAll();
+    ResponseEntity<Collection<ReleaseResponseDto>> readAll();
 
-    /**
-     * Получить объект Release
-     *
-     * @param version - версия объекта Release
+    /** Получить объект Release
+     * @param id - id объекта Release
      */
-    ReleaseEntity read(String version);
+    ResponseEntity<ReleaseResponseDto> read(Long id);
 
-    /**
-     * Обновить объект Release
-     *
-     * @param version - версия объекта Release
-     * @return true, если данные обновлены, иначе false
+    /** Обновить объект Release
+     * @param id - id объекта Release
+     * @return перезаписанный объект release
      */
-    boolean update(String version, ReleaseEntity release);
+    ResponseEntity<ReleaseResponseDto> update(Long id, ReleaseRequestDto release);
 
-    /**
-     * Удалить объект Release
-     *
-     * @param version - версия объекта Release
+    /** Удалить объект release
+     * @param id - id объекта Release
      * @return true если удалено, иначе false
      */
-    boolean delete(String version);
+    ResponseEntity delete(Long id);
 
-    /**
-     * Удалить все объекты Release
-     *
+    /** Удалить все объекты Release
      * @return true если удалены, иначе false
      */
-    boolean deleteAll();
+    ResponseEntity deleteAll();
 }
-
-

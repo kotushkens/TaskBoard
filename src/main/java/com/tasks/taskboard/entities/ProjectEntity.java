@@ -20,14 +20,14 @@ public class ProjectEntity {
     @Column (nullable = false)
     private String name;
     @Column
-    private String isPaid;
+    private boolean isPaid;
     @Column
     private String latestRelease;
 
     public ProjectEntity() {
     }
 
-    public ProjectEntity(Integer id, String name, String isPaid, String latestRelease) {
+    public ProjectEntity(Integer id, String name, boolean isPaid, String latestRelease) {
         this.id = id;
         this.name = name;
         this.isPaid = isPaid;
@@ -50,11 +50,11 @@ public class ProjectEntity {
         this.name = name;
     }
 
-    public String getIsPaid() {
+    public boolean getIsPaid() {
         return isPaid;
     }
 
-    public void setIsPaid(String isPaid) {
+    public void setIsPaid(boolean isPaid) {
         this.isPaid = isPaid;
     }
 

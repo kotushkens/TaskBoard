@@ -1,4 +1,4 @@
-package com.tasks.taskboard.enums;
+package com.tasks.taskboard.entities.enums;
 
 public enum Roles {
     ADMIN,

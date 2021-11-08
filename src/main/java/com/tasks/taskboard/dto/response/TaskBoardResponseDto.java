@@ -1,39 +1,22 @@
-package com.tasks.taskboard.entities;
+package com.tasks.taskboard.dto.response;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.annotations.GenericGenerator;
+import com.tasks.taskboard.dto.request.TaskBoardRequestDto;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Schema(description = "Сущность задания")
-@Entity
-public class TaskBoardEntity {
-    @Id
-    @GenericGenerator(name="generator", strategy = "auto")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Integer id;
-    @Column
+public class TaskBoardResponseDto {
+    private String message;
+    private Long id;
     private String status;
-    @Column
     private String releaseVersion;
-    @Column
-    private Integer author;
-    @Column
-    private Integer executor;
-    @Column
+    private Long author;
+    private Long executor;
     private Enum taskType;
-    @Column
     private String description;
 
-    public TaskBoardEntity(){
+    public TaskBoardResponseDto() {
     }
 
-    public TaskBoardEntity(Integer id, String status,
-                           String releaseVersion, Integer author,
-                           Integer executor, Enum taskType, String description) {
+    public TaskBoardResponseDto(Long id, String status, String releaseVersion,
+                                Long author, Long executor, Enum taskType, String description) {
         this.id = id;
         this.status = status;
         this.releaseVersion = releaseVersion;
@@ -43,11 +26,29 @@ public class TaskBoardEntity {
         this.description = description;
     }
 
-    public Integer getId() {
+    public TaskBoardResponseDto(TaskBoardRequestDto request){
+        this.id = request.getId();
+        this.status = request.getStatus();
+        this.releaseVersion = request.getReleaseVersion();
+        this.author = request.getAuthor();
+        this.executor = request.getExecutor();
+        this.taskType = request.getTaskType();
+        this.description = request.getDescription();
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,19 +68,19 @@ public class TaskBoardEntity {
         this.releaseVersion = releaseVersion;
     }
 
-    public Integer getAuthor() {
+    public Long getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(Long author) {
         this.author = author;
     }
 
-    public Integer getExecutor() {
+    public Long getExecutor() {
         return executor;
     }
 
-    public void setExecutor(Integer executor) {
+    public void setExecutor(Long executor) {
         executor = executor;
     }
 
