@@ -3,37 +3,38 @@ package com.tasks.taskboard.entities;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "task_board")
 @Schema(description = "Сущность задания")
 @Entity
 public class TaskBoardEntity {
     @Id
-    @GenericGenerator(name="generator", strategy = "auto")
+    @GenericGenerator(name = "generator", strategy = "auto")
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Integer id;
-    @Column
+    private Long id;
+    @Column(name = "status")
     private String status;
-    @Column
+    @Column(name = "release_version")
     private String releaseVersion;
-    @Column
-    private Integer author;
-    @Column
-    private Integer executor;
-    @Column
+    @Column(name = "author")
+    private Long author;
+    @Column(name = "executor")
+    private Long executor;
+    @Column(name = "type_of_task")
     private Enum taskType;
-    @Column
+    @Column(name = "description")
     private String description;
 
-    public TaskBoardEntity(){
+    public TaskBoardEntity() {
     }
 
-    public TaskBoardEntity(Integer id, String status,
-                           String releaseVersion, Integer author,
-                           Integer executor, Enum taskType, String description) {
+    public TaskBoardEntity(Long id, String status,
+                           String releaseVersion, Long author,
+                           Long executor, Enum taskType, String description) {
         this.id = id;
         this.status = status;
         this.releaseVersion = releaseVersion;
@@ -43,11 +44,11 @@ public class TaskBoardEntity {
         this.description = description;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,19 +68,19 @@ public class TaskBoardEntity {
         this.releaseVersion = releaseVersion;
     }
 
-    public Integer getAuthor() {
+    public Long getAuthor() {
         return author;
     }
 
-    public void setAuthor(Integer author) {
+    public void setAuthor(Long author) {
         this.author = author;
     }
 
-    public Integer getExecutor() {
+    public Long getExecutor() {
         return executor;
     }
 
-    public void setExecutor(Integer executor) {
+    public void setExecutor(Long executor) {
         executor = executor;
     }
 

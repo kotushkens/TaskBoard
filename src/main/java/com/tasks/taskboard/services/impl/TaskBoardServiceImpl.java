@@ -5,7 +5,6 @@ import com.tasks.taskboard.dto.response.TaskBoardResponseDto;
 import com.tasks.taskboard.exceptions.NotValidParametersException;
 import com.tasks.taskboard.exceptions.ObjectDoesNotExistsException;
 import com.tasks.taskboard.services.TaskBoardService;
-import com.tasks.taskboard.utils.MappingUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import java.util.HashMap;
 public class TaskBoardServiceImpl implements TaskBoardService {
     // Хранилище заданий
     private static final HashMap<Long, TaskBoardResponseDto> objects = new HashMap<>();
-    MappingUtils mapper = new MappingUtils();
 
     @Override
     //????????????????/

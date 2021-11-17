@@ -5,7 +5,6 @@ import com.tasks.taskboard.exceptions.NotValidParametersException;
 import com.tasks.taskboard.services.ReleaseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Release controller", description = "Предоставляет методы для работы с релизами")
@@ -18,7 +17,6 @@ public class ReleaseController {
         this.releaseService = releaseService;
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
 
     /** Операция create
      */

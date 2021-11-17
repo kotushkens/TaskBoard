@@ -6,27 +6,29 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "users")
 @Schema(description = "Сущность пользователя")
 @Entity
 public class UserEntity {
     @Id
-    @GenericGenerator(name="generator", strategy = "auto")
+    @GenericGenerator(name = "generator", strategy = "auto")
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Integer id;
-    @Column
+    private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column
+    @Column(name = "surname")
     private String surname;
-    @Column
+    @Column(name = "contacts")
     private String contacts;
-    @Column
+    @Column(name = "role")
     private String role;
 
-    public UserEntity(){
+    public UserEntity() {
     }
 
-    public UserEntity(Integer id, String name, String surname, String contacts, String role) {
+    public UserEntity(Long id, String name, String surname, String contacts, String role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -34,11 +36,11 @@ public class UserEntity {
         this.role = role;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -5,7 +5,6 @@ import com.tasks.taskboard.exceptions.NotValidParametersException;
 import com.tasks.taskboard.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User controller", description = "Предоставляет методы для работы с пользователями")
@@ -17,8 +16,6 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
 
     /** Операция create
      */

@@ -2,7 +2,6 @@ package com.tasks.taskboard.controllers;
 
 import com.tasks.taskboard.exceptions.NotValidParametersException;
 import com.tasks.taskboard.exceptions.ObjectDoesNotExistsException;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,10 +17,16 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ObjectDoesNotExistsException.class)
-    protected ResponseEntity<?> handleObjectDoesNotExistsException(ObjectDoesNotExistsException e){
+    protected ResponseEntity<?> handleObjectDoesNotExistsException(ObjectDoesNotExistsException e) {
         return ResponseEntity.badRequest()
                 .body(e.getMessage());
     }
+
+   /* @ExceptionHandler(NullPointerException.class)
+    protected ResponseEntity<String> handleNullException(NullPointerException e) {
+        return ResponseEntity.badRequest()
+                .body(e.getMessage());
+    }*/
 
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<String> handleArgumentException(IllegalArgumentException e) {

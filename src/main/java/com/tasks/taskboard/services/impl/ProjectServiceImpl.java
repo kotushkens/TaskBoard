@@ -2,16 +2,21 @@ package com.tasks.taskboard.services.impl;
 
 import com.tasks.taskboard.dto.request.ProjectRequestDto;
 import com.tasks.taskboard.dto.response.ProjectResponseDto;
+import com.tasks.taskboard.entities.ProjectEntity;
 import com.tasks.taskboard.exceptions.NotValidParametersException;
 import com.tasks.taskboard.exceptions.ObjectDoesNotExistsException;
+import com.tasks.taskboard.repositories.ProjectRepository;
 import com.tasks.taskboard.services.ProjectService;
-import com.tasks.taskboard.utils.MappingUtils;
+import com.tasks.taskboard.utils.mappers.impl.ProjectMapperImpl;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 
 // Сервис, реализующий методы для работы контроллера
@@ -19,19 +24,26 @@ import java.util.HashMap;
 @Service
 public class ProjectServiceImpl implements ProjectService {
     // Хранилище релизов
-    private static final HashMap<Long, ProjectResponseDto> objects = new HashMap<>();
-    MappingUtils mapper = new MappingUtils();
+    private static final ArrayList<ProjectResponseDto> objects = new ArrayList<>();
+    private final ProjectMapperImpl mapper;
+    private final ProjectRepository repository;
+
+    @Autowired
+    public ProjectServiceImpl(ProjectMapperImpl mapper, @Qualifier("project") ProjectRepository repository) {
+        this.mapper = mapper;
+        this.repository = repository;
+    }
 
     @Override
     //????????????????/
     public ResponseEntity<ProjectResponseDto> create(ProjectRequestDto project) throws NotValidParametersException {
         try {
             // ProjectEntity projectEntity = new ProjectEntity(project);
-            ProjectResponseDto response = new ProjectResponseDto(project);
-            response.setMessage("Объект успешно создан");
-            objects.put(project.getId(), response);
-            return ResponseEntity.ok()
-                    .body(response);
+            ProjectEntity entity = mapper.ProjectDtoToProject(project);
+            repository.save(entity);
+            ProjectResponseDto response = mapper.projectToProjectDto(entity);
+            objects.add(response);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NotValidParametersException ex) {
             throw new NotValidParametersException("Не удалось создать объект");
         }
@@ -40,9 +52,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ResponseEntity<Collection<ProjectResponseDto>> readAll() throws NotValidParametersException {
         try {
-            if (CollectionUtils.isNotEmpty(objects.values())) {
+            if (CollectionUtils.isNotEmpty(objects)) {
                 return ResponseEntity.ok()
-                        .body(objects.values());
+                        .body(objects);
             } else {
                 throw new ObjectDoesNotExistsException("Список пуст");
             }
@@ -51,7 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
-    @Override
+   /* @Override
     public ResponseEntity<ProjectResponseDto> read(Long id) throws ObjectDoesNotExistsException {
         if (objects.containsKey(id)) {
             return ResponseEntity.ok()
@@ -59,10 +71,10 @@ public class ProjectServiceImpl implements ProjectService {
         } else {
             throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
         }
-    }
+    }*/
 
 
-    @Override
+   /* @Override
     public ResponseEntity<ProjectResponseDto> update(Long id, ProjectRequestDto project)
             throws ObjectDoesNotExistsException {
         if (objects.containsKey(id)) {
@@ -71,9 +83,9 @@ public class ProjectServiceImpl implements ProjectService {
         } else {
             throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
         }
-    }
+    }*/
 
-    @Override
+ /*   @Override
     public ResponseEntity<String> delete(Long id) throws ObjectDoesNotExistsException {
         if (objects.containsKey(id)) {
             objects.remove(id);
@@ -81,11 +93,11 @@ public class ProjectServiceImpl implements ProjectService {
                     .body("Объект удален");
         }
         throw new ObjectDoesNotExistsException("Объект c id " + id + " не найден");
-    }
+    }*/
 
     @Override
     public ResponseEntity<String> deleteAll() throws  NotValidParametersException {
-        if (!objects.isEmpty()) {
+        if (CollectionUtils.isNotEmpty(objects)) {
             objects.clear();
             return ResponseEntity.ok()
                     .body("Список очищен");

@@ -3,7 +3,6 @@ package com.tasks.taskboard.dto.response;
 import com.tasks.taskboard.dto.request.ProjectRequestDto;
 
 public class ProjectResponseDto {
-    private String message;
     private Long id;
     private String name;
     private boolean isPaid;
@@ -12,27 +11,16 @@ public class ProjectResponseDto {
     public ProjectResponseDto() {
     }
 
-    public ProjectResponseDto(Long id, String name, boolean isPaid, String latestRelease) {
-        this.id = id;
+    public ProjectResponseDto(String name, boolean isPaid, String latestRelease) {
         this.name = name;
         this.isPaid = isPaid;
         this.latestRelease = latestRelease;
     }
     
     public ProjectResponseDto(ProjectRequestDto request){
-        this.message = "Объект успешно создан";
-        this.id = request.getId();
         this.name = request.getName();
         this.isPaid = request.getIsPaid();
         this.latestRelease = request.getLatestRelease();
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     public Long getId() {

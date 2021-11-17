@@ -6,39 +6,39 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Table(name = "projects")
 @Schema(description = "Сущность проекта")
 @Entity
 public class ProjectEntity {
     @Id
     @GenericGenerator(name = "generator", strategy = "auto")
-    @GeneratedValue
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    private Integer id;
-    @Column (nullable = false)
+    private Long id;
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column
+    @Column(name = "is_paid")
     private boolean isPaid;
-    @Column
+    @Column(name = "latest_release")
     private String latestRelease;
 
     public ProjectEntity() {
     }
 
-    public ProjectEntity(Integer id, String name, boolean isPaid, String latestRelease) {
+    public ProjectEntity(Long id, String name, boolean isPaid, String latestRelease) {
         this.id = id;
         this.name = name;
         this.isPaid = isPaid;
         this.latestRelease = latestRelease;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -65,7 +65,6 @@ public class ProjectEntity {
     public void setLatestRelease(String latestRelease) {
         this.latestRelease = latestRelease;
     }
-
 
 
 }

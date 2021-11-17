@@ -7,8 +7,10 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
+@Table(name = "releases")
 @Schema(description = "Сущность релиза")
 @Entity
 public class ReleaseEntity {
@@ -16,11 +18,11 @@ public class ReleaseEntity {
     @GenericGenerator(name="generator", strategy = "auto")
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
-    @Column
+    @Column(name = "version")
     private String version;
-    @Column
+    @Column(name = "starts_at")
     private Date start;
-    @Column
+    @Column(name = "ends_at")
     private Date end;
 
     public ReleaseEntity(){
